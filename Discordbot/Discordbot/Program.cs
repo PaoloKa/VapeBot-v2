@@ -2,6 +2,8 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Discordbot.Commands;
+using Discordbot.Infrastructure.Services;
+using Discordbot.Infrastructure.Services.Scheduler;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -20,12 +22,23 @@ namespace Discordbot
 
         public async Task MainAsync()
         {
-			ServiceCollection serviceCollection = new ServiceCollection();
+			var serviceCollection = new ServiceCollection();
 			ConfigureServices(serviceCollection);
 
 			CreateBot();
+
+			ScheduleTasks();
+
 			// Block this task until the program is closed.
 			await Task.Delay(-1);
+		}
+
+		public void ScheduleTasks()
+		{
+			//SchedulerFactory.IntervalInSeconds(DateTime.Now.Hour, DateTime.Now.Minute + 1, 10, () =>
+			//{
+			//	Console.WriteLine("Scheduler working");
+			//});
 		}
 
 		public async void CreateBot()
@@ -42,12 +55,16 @@ namespace Discordbot
 
 		private static void ConfigureServices(IServiceCollection serviceCollection)
 		{
+			//serviceCollection //Can be used for DI
+			//	//.AddSingleton<ISchedulerService, SchedulerService>()
+			//	.AddSingleton<IConfigurationRoot>()
+			//	.BuildServiceProvider();
 			// Build configuration
 			configuration = new ConfigurationBuilder()
 				.SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
 				.AddJsonFile("appsettings.json", false)
 				.Build();
-			// Add access to generic IConfigurationRoot
+
 			serviceCollection.AddSingleton<IConfigurationRoot>(configuration);
 		}
 
