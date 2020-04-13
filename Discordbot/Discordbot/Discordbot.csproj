@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Database\" />
+    <Folder Include="Infrastructure\Services\Scheduler\Tasks\" />
   </ItemGroup>
 
 </Project>

@@ -14,8 +14,7 @@ namespace Discordbot
 {
     public class Program
     {
-		private DiscordSocketClient _client;
-		public static IConfigurationRoot configuration;
+		public IConfigurationRoot configuration;
 
 		public static void Main(string[] args)
          => new Program().MainAsync().GetAwaiter().GetResult();
@@ -24,63 +23,50 @@ namespace Discordbot
         {
 			var serviceCollection = new ServiceCollection();
 			ConfigureServices(serviceCollection);
-
-			CreateBot();
-
 			ScheduleTasks();
 
-			// Block this task until the program is closed.
+			var provider = serviceCollection.BuildServiceProvider();
+			provider.GetRequiredService<LoggingService>();  
+			provider.GetRequiredService<CommandHandler>(); 
+
+			await provider.GetRequiredService<DiscordStartupService>().StartAsync();
+
+			//block this task until app is exited
 			await Task.Delay(-1);
 		}
 
 		public void ScheduleTasks()
 		{
-			//SchedulerFactory.IntervalInSeconds(DateTime.Now.Hour, DateTime.Now.Minute + 1, 10, () =>
-			//{
-			//	Console.WriteLine("Scheduler working");
-			//});
+			SchedulerFactory.IntervalInSeconds(DateTime.Now.Hour, DateTime.Now.Minute + 1, 10, () =>
+			{
+				Console.WriteLine("Scheduler working");
+			});
 		}
 
-		public async void CreateBot()
+		private  void ConfigureServices(IServiceCollection serviceCollection)
 		{
-			_client = new DiscordSocketClient();
 
-			_client.Log += Log;
-			_client.MessageReceived += PingTester;
-			await _client.LoginAsync(TokenType.Bot, configuration[("DiscordToken")]);
-			await _client.StartAsync();
-
-			await new CommandHandler(_client, new CommandService()).InstallCommandsAsync(); //TODO: maybe use DI here? 
-		}
-
-		private static void ConfigureServices(IServiceCollection serviceCollection)
-		{
-			//serviceCollection //Can be used for DI
-			//	//.AddSingleton<ISchedulerService, SchedulerService>()
-			//	.AddSingleton<IConfigurationRoot>()
-			//	.BuildServiceProvider();
-			// Build configuration
 			configuration = new ConfigurationBuilder()
 				.SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
 				.AddJsonFile("appsettings.json", false)
 				.Build();
 
-			serviceCollection.AddSingleton<IConfigurationRoot>(configuration);
+			serviceCollection.AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
+			{                                      
+				LogLevel = LogSeverity.Verbose,     // Tell the logger to give Verbose amount of info
+				MessageCacheSize = 1000             // Cache 1,000 messages per channel
+			}))
+			.AddSingleton(new CommandService(new CommandServiceConfig
+			{                                       
+				LogLevel = LogSeverity.Verbose,     // Tell the logger to give Verbose amount of info
+				DefaultRunMode = RunMode.Async,     // Force all commands to run async by default
+			}))
+			.AddSingleton<CommandHandler>()
+			.AddSingleton<DiscordStartupService>()
+			.AddSingleton<LoggingService>()
+			.AddSingleton<IDiscordUserService, DiscordUserService>()
+			.AddSingleton<IConfigurationRoot>(configuration);
 		}
 
-		//User for development to test if the bot can actually receive requests
-		private async Task PingTester(SocketMessage message)
-		{
-			if (message.Content == "!ping")
-			{
-				await message.Channel.SendMessageAsync("Pong!");
-			}
-		}
-		//Also use DI
-		private Task Log(LogMessage msg)
-		{
-			Console.WriteLine(msg.ToString());
-			return Task.CompletedTask;
-		}
 	}
 }
