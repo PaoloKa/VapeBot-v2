@@ -23,7 +23,6 @@ namespace Discordbot
 			ServiceCollection serviceCollection = new ServiceCollection();
 			ConfigureServices(serviceCollection);
 
-			Console.WriteLine(configuration[("DiscordToken")]);
 			CreateBot();
 			// Block this task until the program is closed.
 			await Task.Delay(-1);
@@ -35,7 +34,7 @@ namespace Discordbot
 
 			_client.Log += Log;
 			_client.MessageReceived += PingTester;
-			await _client.LoginAsync(TokenType.Bot, ("MzgwNjcwNjYzNTU3NTEzMjE4.XpSQig.3qOxEAHM3L86nbFrmxtxWgsoBw4"));
+			await _client.LoginAsync(TokenType.Bot, configuration[("DiscordToken")]);
 			await _client.StartAsync();
 
 			await new CommandHandler(_client, new CommandService()).InstallCommandsAsync(); //TODO: maybe use DI here? 
