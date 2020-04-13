@@ -26,14 +26,15 @@ namespace Discordbot.Infrastructure.Services.Scheduler.Tasks
 
         public void SchedulaAllTasks()
         {
-            SchedulerFactory.IntervalInSeconds(DateTime.Now.Hour, DateTime.Now.Minute + 1, 10, () =>
+            //12, 30 , 24
+            SchedulerFactory.IntervalInHours(DateTime.Now.Hour, DateTime.Now.Minute + 1, 10, () =>
             {
                 if (!_discordUserService.isUserOnline(ulong.Parse(_config["WakeUpTargetUserId"])))
                 {
-                    Console.WriteLine("Not online");
+                    _discord.GetGuild(ulong.Parse(_config["ServerId"])).GetTextChannel(ulong.Parse(_config["GeneralId"])).SendMessageAsync("Thomas is wakker geraakt voor 1u!!");
                 } else
                 {
-                    Console.WriteLine("online :)");
+                    _discord.GetGuild(ulong.Parse(_config["ServerId"])).GetTextChannel(ulong.Parse(_config["GeneralId"])).SendMessageAsync("Thomas is niet wakker geraakt voor 1u!! :(");
                 }
             });
         }

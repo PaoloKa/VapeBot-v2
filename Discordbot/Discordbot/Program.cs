@@ -24,8 +24,6 @@ namespace Discordbot
         {
 			var serviceCollection = new ServiceCollection();
 			ConfigureServices(serviceCollection);
-			ScheduleTasks();
-
 			var provider = serviceCollection.BuildServiceProvider();
 			provider.GetRequiredService<LoggingService>();  
 			provider.GetRequiredService<CommandHandler>(); 
@@ -34,14 +32,6 @@ namespace Discordbot
 
 			//block this task until app is exited
 			await Task.Delay(-1);
-		}
-
-		public void ScheduleTasks()
-		{
-			SchedulerFactory.IntervalInSeconds(DateTime.Now.Hour, DateTime.Now.Minute + 1, 10, () =>
-			{
-				Console.WriteLine("Scheduler working");
-			});
 		}
 
 		private  void ConfigureServices(IServiceCollection serviceCollection)
