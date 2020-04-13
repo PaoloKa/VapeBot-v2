@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\morti\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\morti\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Discordbot.1780885959.00" t="ExcludeRecursive" />
+    <e p="C:\Users\morti\Documents\Programming\projects\VapeBot-v2\Discordbot" t="IncludeFlat">
+      <e p="Discordbot" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="CommandHandler.cs" t="Include" />
+          <e p="Modules" t="Include">
+            <e p="CoronaModule.cs" t="Include" />
+            <e p="InfoModule.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Discordbot.csproj" t="IncludeRecursive" />
+        <e p="Model" t="Include">
+          <e p="CountryData.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="Discordbot.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+      </e>
+      <e p="Discordbot.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
