@@ -15,14 +15,12 @@ namespace Discordbot.Infrastructure.Services
         public void ScheduleTask(int hour, int min, double intervalInHour, Action task)
         {
             DateTime now = DateTime.Now;
-            Console.WriteLine(now.ToString());
             DateTime firstRun = new DateTime(now.Year, now.Month, now.Day, hour, min, 0, 0);
             if (now > firstRun)
             {
                 firstRun = firstRun.AddDays(1);
             }
             TimeSpan timeToGo = firstRun - now;
-            Console.WriteLine(timeToGo.ToString());
             if (timeToGo <= TimeSpan.Zero)
             {
                 timeToGo = TimeSpan.Zero;

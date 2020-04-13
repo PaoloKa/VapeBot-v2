@@ -4,6 +4,7 @@ using Discord.WebSocket;
 using Discordbot.Commands;
 using Discordbot.Infrastructure.Services;
 using Discordbot.Infrastructure.Services.Scheduler;
+using Discordbot.Infrastructure.Services.Scheduler.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -62,6 +63,7 @@ namespace Discordbot
 				DefaultRunMode = RunMode.Async,     // Force all commands to run async by default
 			}))
 			.AddSingleton<CommandHandler>()
+			.AddSingleton<IDiscordTasksService, DiscordTasksService>()
 			.AddSingleton<DiscordStartupService>()
 			.AddSingleton<LoggingService>()
 			.AddSingleton<IDiscordUserService, DiscordUserService>()

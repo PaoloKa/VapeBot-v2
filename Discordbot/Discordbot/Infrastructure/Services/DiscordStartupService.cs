@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Discordbot.Commands;
+using Discordbot.Infrastructure.Services.Scheduler.Tasks;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -17,17 +18,20 @@ namespace Discordbot.Infrastructure.Services
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
         private readonly IConfigurationRoot _config;
+        private readonly IDiscordTasksService _discordTasksService;
 
         public DiscordStartupService(
             IServiceProvider provider,
             DiscordSocketClient discord,
             CommandService commands,
-            IConfigurationRoot config)
+            IConfigurationRoot config,
+            IDiscordTasksService discordTasksService)
         {
             _provider = provider;
             _config = config;
             _discord = discord;
             _commands = commands;
+            _discordTasksService = discordTasksService;
         }
 
         public async Task StartAsync()
@@ -35,12 +39,10 @@ namespace Discordbot.Infrastructure.Services
             string discordToken = _config["DiscordToken"];
             if (string.IsNullOrWhiteSpace(discordToken))
                 throw new Exception("Please enter your bot's token into the `_configuration.json` file found in the applications root directory.");
-
-            await _discord.LoginAsync(TokenType.Bot, discordToken);     // Login to discord
-            await _discord.StartAsync();                                // Connect to the websocket
-                                                                        //zanew CommandHandler(_client, new CommandService()).InstallCommandsAsync();
-                                                                        //await new CommandHandler(_discord, new CommandService()).InstallCommandsAsync();
-            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);     // Load commands and modules into the command service
+            await _discord.LoginAsync(TokenType.Bot, discordToken);  
+            await _discord.StartAsync();                               
+            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);    
+            _discordTasksService.SchedulaAllTasks();
         }
     }
 }
