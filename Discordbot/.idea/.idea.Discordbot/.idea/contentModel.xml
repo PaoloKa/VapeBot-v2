@@ -12,9 +12,27 @@
           <e p="Modules" t="Include">
             <e p="CoronaModule.cs" t="Include" />
             <e p="InfoModule.cs" t="Include" />
+            <e p="LastOnlineModule.cs" t="Include" />
           </e>
         </e>
+        <e p="Database" t="Include" />
         <e p="Discordbot.csproj" t="IncludeRecursive" />
+        <e p="Infrastructure" t="Include">
+          <e p="Services" t="Include">
+            <e p="DiscordStartupService.cs" t="Include" />
+            <e p="DiscordUtils" t="Include">
+              <e p="DiscordUserService.cs" t="Include" />
+            </e>
+            <e p="LoggingService.cs" t="Include" />
+            <e p="Scheduler" t="Include">
+              <e p="SchedulerFactory.cs" t="Include" />
+              <e p="SchedulerService.cs" t="Include" />
+              <e p="Tasks" t="Include">
+                <e p="DiscordTaskService.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
         <e p="Model" t="Include">
           <e p="CountryData.cs" t="Include" />
         </e>
