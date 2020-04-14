@@ -22,11 +22,8 @@ namespace Discordbot.Commands.Modules
             HttpResponseMessage response = await client.GetAsync("https://api.covid19api.com/dayone/country/" + country);
 
             string rawString = await response.Content.ReadAsStringAsync();
-            
             var coronaCountry = JsonConvert.DeserializeObject<List<CountryData>>(rawString);
             
-            Console.WriteLine();
-
             if (response.IsSuccessStatusCode)
             {
                 await ReplyAsync(coronaCountry.Last().Deaths + " DODEN HAHAHAHAHAHAHAHA 😂😂😂");
